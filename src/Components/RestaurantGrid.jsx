@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useGetRestaurantDetails } from "../Hooks";
-import { Star, MapPin } from "lucide-react"; // Optional icons
+import { Star, MapPin } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const RESTAURANT_IMAGES = [
   "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=60", // Interior
@@ -25,9 +26,34 @@ const RESTAURANT_IMAGES = [
   "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?auto=format&fit=crop&w=800&q=60", // Thai
 ];
 
+const RestaurantGrid = () => {
+  const restaurants = useGetRestaurantDetails();
+  console.log(restaurants);
+
+  // Guard clause for loading state or empty data
+  if (!restaurants)
+    return <div className="text-center py-10">Loading tasty options...</div>;
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      <h2 className="text-2xl font-bold text-gray-800 mb-6">
+        Popular Restaurants Near You
+      </h2>
+
+      {/* Responsive Grid Layout */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {restaurants.map((res) => (
+          <RestaurantCard key={res.id} restaurant={res} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default RestaurantGrid;
 const RestaurantCard = ({ restaurant }) => {
   const [image, setImage] = useState(restaurant.image_url);
-  const { name, rating, cuisine, address } = restaurant;
+  const { id, name, rating, cuisine, address } = restaurant;
 
   return (
     <div className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 cursor-pointer">
@@ -62,35 +88,12 @@ const RestaurantCard = ({ restaurant }) => {
         </div>
 
         {/* Action Button */}
-        <button className="w-full mt-4 py-2 bg-gray-50 text-gray-700 font-semibold rounded-lg group-hover:bg-orange-500 group-hover:text-white transition-colors duration-300">
-          View Menu
-        </button>
+        <Link to={`/res/${id}`}>
+          <button className="w-full mt-4 py-2 bg-gray-50 text-gray-700 font-semibold rounded-lg group-hover:bg-orange-500 group-hover:text-white transition-colors duration-300">
+            View Menu
+          </button>
+        </Link>
       </div>
     </div>
   );
 };
-
-const RestaurantGrid = () => {
-  const restaurants = useGetRestaurantDetails();
-
-  // Guard clause for loading state or empty data
-  if (!restaurants)
-    return <div className="text-center py-10">Loading tasty options...</div>;
-
-  return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">
-        Popular Restaurants Near You
-      </h2>
-
-      {/* Responsive Grid Layout */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {restaurants.map((res) => (
-          <RestaurantCard key={res.id} restaurant={res} />
-        ))}
-      </div>
-    </div>
-  );
-};
-
-export default RestaurantGrid;
