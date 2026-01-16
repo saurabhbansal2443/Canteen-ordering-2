@@ -3,20 +3,34 @@ import { useParams, Link } from "react-router-dom";
 import { useGetRestaurantDetails } from "../Hooks";
 import { Star, Clock, Plus, MapPin, BadgePercent } from "lucide-react";
 import Navbar from "../Components/Navbar";
+import { useSelector, useDispatch } from "react-redux";
+import { addToCart } from "../Store/appSlice";
 
 const RestaurantDetails = () => {
+  let dispatch = useDispatch();
+ 
   const { id } = useParams();
   const allRestaurantData = useGetRestaurantDetails();
 
   const restaurant = allRestaurantData?.find((res) => res.id === id);
 
+  const handleAdd = (item) => {
+    dispatch(addToCart(item));
+  };
   if (!restaurant) {
     return (
       <div className="min-h-screen bg-white">
         <Navbar />
         <div className="flex flex-col items-center justify-center mt-20">
-          <h2 className="text-2xl font-bold text-gray-800">Restaurant not found</h2>
-          <Link to="/" className="mt-4 px-6 py-2 bg-orange-500 text-white rounded-lg">Go Home</Link>
+          <h2 className="text-2xl font-bold text-gray-800">
+            Restaurant not found
+          </h2>
+          <Link
+            to="/"
+            className="mt-4 px-6 py-2 bg-orange-500 text-white rounded-lg"
+          >
+            Go Home
+          </Link>
         </div>
       </div>
     );
@@ -62,7 +76,9 @@ const RestaurantDetails = () => {
                 <Clock className="w-4 h-4 text-orange-600" />
               </div>
               <div>
-                <p className="text-xs text-gray-400 font-bold uppercase">Delivery</p>
+                <p className="text-xs text-gray-400 font-bold uppercase">
+                  Delivery
+                </p>
                 <p className="text-sm font-bold text-gray-700">25-35 MINS</p>
               </div>
             </div>
@@ -71,8 +87,12 @@ const RestaurantDetails = () => {
                 <BadgePercent className="w-4 h-4 text-blue-600" />
               </div>
               <div>
-                <p className="text-xs text-gray-400 font-bold uppercase">Offers</p>
-                <p className="text-sm font-bold text-gray-700">Use FREE50 code</p>
+                <p className="text-xs text-gray-400 font-bold uppercase">
+                  Offers
+                </p>
+                <p className="text-sm font-bold text-gray-700">
+                  Use FREE50 code
+                </p>
               </div>
             </div>
           </div>
@@ -95,7 +115,10 @@ const RestaurantDetails = () => {
               >
                 <div className="flex-1 pr-6">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="w-3 h-3 rounded-full bg-green-500 border-2 border-green-100" title="Veg"></span>
+                    <span
+                      className="w-3 h-3 rounded-full bg-green-500 border-2 border-green-100"
+                      title="Veg"
+                    ></span>
                     <h4 className="text-xl font-bold text-gray-800 group-hover:text-orange-600 transition-colors">
                       {item.name}
                     </h4>
@@ -116,7 +139,10 @@ const RestaurantDetails = () => {
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                   </div>
-                  <button className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-white text-green-600 font-black px-8 py-2 rounded-xl shadow-lg border border-gray-100 hover:bg-green-50 transition-all flex items-center gap-2 active:scale-90">
+                  <button
+                    onClick={() => handleAdd(item)}
+                    className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-white text-green-600 font-black px-8 py-2 rounded-xl shadow-lg border border-gray-100 hover:bg-green-50 transition-all flex items-center gap-2 active:scale-90"
+                  >
                     ADD
                     <Plus className="w-4 h-4 stroke-[3px]" />
                   </button>
