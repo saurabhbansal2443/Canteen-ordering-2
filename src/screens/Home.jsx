@@ -1,11 +1,14 @@
-import React from 'react'
+import React from "react";
+import Navbar from "../Components/Navbar";
+import RestaurantGrid from "../Components/RestaurantGrid";
 
 const Home = () => {
   return (
     <div>
-      Home
+      <Navbar />
+      <RestaurantGrid />
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
